@@ -11,7 +11,7 @@ interface facebookLoginProps {
 
 interface Response {
 	status: "connected" | "not_authorized" | "unknown";
-	authResponse: null | AuthResponse;
+	authResponse: AuthResponse;
 }
 
 interface AuthResponse {
@@ -64,15 +64,18 @@ function checkLogin() {
 function checkState(checkResponse: Response) {
 	if (checkResponse.status === "connected") {
 		// 로그인 돼있을 때 작업
-        getUser();
+        tokenHandler(checkResponse);
+        // getUser();
 	} else {
 		(window as any).FB.login((response: Response) => {
 			// 로그인 후 작업
-            if(response.status === "connected"){
-                // Do Somethings...
-            }
+            tokenHandler(response);
 		});
 	}
+}
+
+function tokenHandler(response: Response){
+    console.log(response);
 }
 
 function getUser() {
